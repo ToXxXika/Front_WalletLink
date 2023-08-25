@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../api/Caller.dart';
 import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
@@ -22,7 +24,8 @@ class TransactionADDWidget extends StatefulWidget {
 class _TransactionADDWidgetState extends State<TransactionADDWidget>
     with TickerProviderStateMixin {
   late TransactionADDModel _model;
-
+ late String cin ="";
+ late String walletRef="";
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   final animationsMap = {
@@ -132,6 +135,20 @@ class _TransactionADDWidgetState extends State<TransactionADDWidget>
     ),
   };
 
+  void loadData()async{
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    _model.spentAtController.text = prefs.getString('Rib') ?? 'Rib';
+    print(_model.spentAtController.text);
+    _model.reasonController.text = prefs.getString('nom').toString() + ' ' + prefs.getString('prenom').toString() ?? 'Username';
+    String? cin = prefs.getString('cin');
+    String? wallet = prefs.getString('refWallet');
+    setState(() {
+      this.cin = cin!;
+      this.walletRef = wallet!;
+    });
+
+  }
   @override
   void initState() {
     super.initState();
@@ -140,6 +157,7 @@ class _TransactionADDWidgetState extends State<TransactionADDWidget>
     _model.textController1 ??= TextEditingController();
     _model.spentAtController ??= TextEditingController();
     _model.reasonController ??= TextEditingController();
+    loadData();
     setupAnimations(
       animationsMap.values.where((anim) =>
           anim.trigger == AnimationTrigger.onActionTrigger ||
@@ -200,9 +218,7 @@ class _TransactionADDWidgetState extends State<TransactionADDWidget>
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            FFLocalizations.of(context).getText(
-                              'qywon4k1' /* Add Transaction */,
-                            ),
+                            'Fund Wallet',
                             style: FlutterFlowTheme.of(context).displaySmall,
                           ),
                           Card(
@@ -311,12 +327,11 @@ class _TransactionADDWidgetState extends State<TransactionADDWidget>
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
                         child: TextFormField(
+                          enabled: false,
                           controller: _model.spentAtController,
                           obscureText: false,
                           decoration: InputDecoration(
-                            labelText: FFLocalizations.of(context).getText(
-                              'ohewrgsv' /* Spent At */,
-                            ),
+                            labelText: 'RIB',
                             labelStyle: FlutterFlowTheme.of(context).bodySmall,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -358,58 +373,13 @@ class _TransactionADDWidgetState extends State<TransactionADDWidget>
                       Padding(
                         padding:
                             EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                        child: FlutterFlowDropDown<String>(
-                          controller: _model.budgetValueController ??=
-                              FormFieldController<String>(null),
-                          options: [
-                            FFLocalizations.of(context).getText(
-                              '3170k9n1' /* Office Budget */,
-                            ),
-                            FFLocalizations.of(context).getText(
-                              'abz6nm8z' /* External Transfer */,
-                            ),
-                            FFLocalizations.of(context).getText(
-                              '3y95vtb6' /* ACH Payment */,
-                            )
-                          ],
-                          onChanged: (val) =>
-                              setState(() => _model.budgetValue = val),
-                          width: MediaQuery.sizeOf(context).width * 0.9,
-                          height: 60.0,
-                          textStyle: FlutterFlowTheme.of(context).bodyMedium,
-                          hintText: FFLocalizations.of(context).getText(
-                            '861el4k4' /* Select Budget */,
-                          ),
-                          icon: Icon(
-                            Icons.keyboard_arrow_down_rounded,
-                            color: FlutterFlowTheme.of(context).grayLight,
-                            size: 15.0,
-                          ),
-                          fillColor:
-                              FlutterFlowTheme.of(context).secondaryBackground,
-                          elevation: 2.0,
-                          borderColor: FlutterFlowTheme.of(context).alternate,
-                          borderWidth: 2.0,
-                          borderRadius: 8.0,
-                          margin: EdgeInsetsDirectional.fromSTEB(
-                              20.0, 20.0, 12.0, 20.0),
-                          hidesUnderline: true,
-                          isSearchable: false,
-                          isMultiSelect: false,
-                        ).animateOnPageLoad(
-                            animationsMap['dropDownOnPageLoadAnimation']!),
-                      ),
-                      Padding(
-                        padding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
                         child: TextFormField(
                           controller: _model.reasonController,
+                          enabled: false,
                           obscureText: false,
                           decoration: InputDecoration(
                             labelStyle: FlutterFlowTheme.of(context).bodyMedium,
-                            hintText: FFLocalizations.of(context).getText(
-                              'swxms7ln' /* Reason */,
-                            ),
+                            hintText: 'Username',
                             hintStyle: FlutterFlowTheme.of(context).bodySmall,
                             enabledBorder: OutlineInputBorder(
                               borderSide: BorderSide(
@@ -466,6 +436,8 @@ class _TransactionADDWidgetState extends State<TransactionADDWidget>
                     children: [
                       FFButtonWidget(
                         onPressed: () {
+                          Caller fund = Caller();
+                          fund.fundwallet(cin, _model.textController1.text, walletRef, context);
                           print('Button pressed ...');
                         },
                         text: FFLocalizations.of(context).getText(

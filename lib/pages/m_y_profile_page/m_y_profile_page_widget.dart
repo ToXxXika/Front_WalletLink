@@ -139,8 +139,7 @@ class _MYProfilePageWidgetState extends State<MYProfilePageWidget> {
                                       ),
                                       onPressed: ()async {
                                         print('IconButton pressed ...');
-                                        SharedPreferences prefs = await SharedPreferences.getInstance();
-                                        prefs.clear();
+
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(

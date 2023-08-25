@@ -158,6 +158,7 @@ class _MYBudgetsWidgetState extends State<MYBudgetsWidget>
           TextButton(onPressed: () async {
             SharedPreferences prefs = await SharedPreferences.getInstance();
             String? walletBalance = prefs.getString("balanceWallet");
+            print(walletBalance);
             double? walletBalanceDouble = double.tryParse(walletBalance ?? '0');
             if(double.tryParse(_textEditingController.text)!<walletBalanceDouble!) {
               prefs.setDouble("amount", double.tryParse(_textEditingController.text)!);

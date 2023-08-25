@@ -53,11 +53,7 @@ class _MYCardWidgetState extends State<MYCardWidget>
       ribAccount = storeAccountRib ?? '';
       AccountBalance = storedAccountBalance ?? '';
       TransactionsCount = storedTransactionsCOunt ?? 0;
-      List<dynamic> transactionsJson = storedTransactions !;
-      List<Transaction> transactionsList = transactionsJson.map((
-          transactionsJson) => Transaction.fromJson(transactionsJson)).toList();
-      print("TransactionsList");
-      print(transactionsList.first);
+
 
 
     });

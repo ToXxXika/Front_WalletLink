@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wallet_link/api/Caller.dart';
+import 'package:wallet_link/pages/m_y_card/m_y_card_widget.dart';
 
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
@@ -25,6 +27,8 @@ class _HomePageWidgetState extends State<HomePageWidget> {
 
   Future<void> getDataformSharedPreferences()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
+     Caller _caller = Caller();
+     _caller.LoadWalletData(prefs.getString("cin").toString());
      String? storednom = prefs.getString('nom').toString() ?? 'USER';
      String? storedprenom = prefs.getString('prenom').toString() ?? 'USER';
      String? storedWalletBalance = prefs.getString('balanceWallet').toString() ?? '';
@@ -202,9 +206,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           style: FlutterFlowTheme.of(context).bodySmall,
                         ),
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'zrx9e6tv' /* $12,245 */,
-                          ),
+                          'WIP',
                           style: FlutterFlowTheme.of(context).displaySmall,
                         ),
                         Padding(
@@ -225,9 +227,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 4.0, 0.0, 0.0),
                           child: Text(
-                            FFLocalizations.of(context).getText(
-                              '726vrs60' /* Aug 31, 2021 */,
-                            ),
+                            'WIP',
                             style: FlutterFlowTheme.of(context).headlineSmall,
                           ),
                         ),
@@ -235,9 +235,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 4.0, 0.0, 0.0),
                           child: Text(
-                            FFLocalizations.of(context).getText(
-                              '4dgbx46t' /* 4 Days Left */,
-                            ),
+                            'WIP',
                             style: GoogleFonts.getFont(
                               'Lexend Deca',
                               color: FlutterFlowTheme.of(context).textColor,
@@ -270,9 +268,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           style: FlutterFlowTheme.of(context).bodySmall,
                         ),
                         Text(
-                          FFLocalizations.of(context).getText(
-                            'l5pw5c8c' /* $4,000 */,
-                          ),
+                          'WIP',
                           style: FlutterFlowTheme.of(context).displaySmall,
                         ),
                         Padding(
@@ -293,9 +289,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 4.0, 0.0, 0.0),
                           child: Text(
-                            FFLocalizations.of(context).getText(
-                              '9a2ya1la' /* $3,402 */,
-                            ),
+                            'WIP',
                             style: FlutterFlowTheme.of(context).headlineSmall,
                           ),
                         ),
@@ -303,9 +297,7 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               0.0, 4.0, 0.0, 0.0),
                           child: Text(
-                            FFLocalizations.of(context).getText(
-                              'n1o498d9' /* 4 Days Left */,
-                            ),
+                            'WIP',
                             style: GoogleFonts.getFont(
                               'Lexend Deca',
                               color: FlutterFlowTheme.of(context).textColor,
@@ -474,7 +466,12 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                             hoverColor: Colors.transparent,
                             highlightColor: Colors.transparent,
                             onTap: () async {
-                              context.goNamed('MY_Card');
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const MYCardWidget(),
+                                ),
+                              );
                             },
                             child: Container(
                               width: MediaQuery.sizeOf(context).width * 0.24,
@@ -526,85 +523,6 @@ class _HomePageWidgetState extends State<HomePageWidget> {
                   ],
                 ),
               ),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(16.0, 16.0, 16.0, 0.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  width: MediaQuery.sizeOf(context).width * 0.92,
-                  decoration: BoxDecoration(
-                    color: FlutterFlowTheme.of(context).secondary,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: Padding(
-                    padding:
-                        EdgeInsetsDirectional.fromSTEB(12.0, 12.0, 12.0, 12.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 0.0, 0.0, 4.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 8.0, 0.0),
-                                child: Icon(
-                                  Icons.notifications_sharp,
-                                  color: FlutterFlowTheme.of(context).textColor,
-                                  size: 24.0,
-                                ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  FFLocalizations.of(context).getText(
-                                    'nb29ps2o' /* 1 New Alert */,
-                                  ),
-                                  style: FlutterFlowTheme.of(context).bodySmall,
-                                ),
-                              ),
-                              Text(
-                                FFLocalizations.of(context).getText(
-                                  'vgt9s153' /* View Now */,
-                                ),
-                                style: FlutterFlowTheme.of(context)
-                                    .bodySmall
-                                    .override(
-                                      fontFamily: 'Lexend',
-                                      color: FlutterFlowTheme.of(context)
-                                          .background,
-                                    ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(
-                              0.0, 4.0, 0.0, 0.0),
-                          child: Text(
-                            FFLocalizations.of(context).getText(
-                              'pnvkw3b7' /* We noticed a small charge that... */,
-                            ),
-                            style: GoogleFonts.getFont(
-                              'Lexend Deca',
-                              color: Color(0xB4FFFFFF),
-                              fontSize: 12.0,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
             ),
           ),
         ],

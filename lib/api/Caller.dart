@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:wallet_link/pages/m_y_card/m_y_card_widget.dart';
 import 'package:wallet_link/pages/profilepage/profilepage_widget.dart';
 
 import '../pages/home_page/home_page_widget.dart';
@@ -17,7 +18,7 @@ class Caller {
     print(password);
     print(cin);
     try {
-      final Uri uri = Uri.http("192.168.1.23:8080", '/user/register',
+      final Uri uri = Uri.http("192.168.1.22:8081", '/user/register',
           {'email': mail, 'mdp': password, 'cin': cin});
       final response = await http.post(uri);
       print(response.body);
@@ -47,7 +48,7 @@ class Caller {
   Future<bool> LoadBankAccountsData(String cin) async {
     try {
       final Uri uri =
-          Uri.http('192.168.1.23:8080', '/wallet/gad', {'cin': cin});
+          Uri.http('192.168.1.22:8081', '/wallet/gad', {'cin': cin});
       final response = await http.get(uri);
       final decodedResponse = json.decode(response.body);
       print(decodedResponse);
@@ -67,7 +68,7 @@ class Caller {
   Future<bool> LoadWalletData(String cin) async {
     try {
       final Uri uri =
-          Uri.http('192.168.1.23:8080', '/wallet/gwd', {'cin': cin});
+          Uri.http('192.168.1.22:8081', '/wallet/gwd', {'cin': cin});
       final response = await http.get(uri);
       final decodedResponse = json.decode(response.body);
       print(decodedResponse);
@@ -86,7 +87,7 @@ class Caller {
   Future<bool> verifyCredentials(
       String email, String password, BuildContext context) async {
     try {
-      final Uri uri = Uri.http('192.168.1.23:8080', '/user/login',
+      final Uri uri = Uri.http('192.168.1.22:8081', '/user/login',
           {'email': email, 'mdp': password});
       final response = await http.post(uri);
       final decodedresponse = json.decode(response.body);
@@ -128,14 +129,20 @@ class Caller {
     }
   }
 
-  Future<bool> EditProfile(String cin ,String email,String phone) async {
+  Future<bool> EditProfile(String cin ,String email,String phone,BuildContext context) async {
     try{
-      final Uri uri = Uri.http('192.168.1.23:8080','/user/edit',{'cin':cin,'email':email,'phone':phone});
+      final Uri uri = Uri.http('192.168.1.22:8081','/user/edit',{'cin':cin,'email':email,'phone':phone});
       final response = await http.post(uri);
       final decodedResponse = json.decode(response.body);
       print(decodedResponse);
       if(decodedResponse["code"]== 200){
-
+         ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Profile Updated'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+         initState(context);
       }
     }catch(e){
       print(e);
@@ -144,27 +151,34 @@ class Caller {
   }
 
   Future<bool> fundwallet(
-      String cin, Float cash, String wallet, BuildContext context) async {
+      String cin, String cash, String wallet, BuildContext context) async {
     try {
-      final Uri uri = Uri.http('192.168.1.23:8080', '/wallet/fw',
+      final Uri uri = Uri.http('192.168.1.22:8081', '/wallet/fw',
           {'cin': cin, 'cash': cash, 'walletref': wallet});
       final response = await http.post(uri);
       if (response.statusCode == 200) {
-        AlertDialog(
-          title: Text('Success'),
-          content: Text('Wallet Funded'),
-          actions: [
-            TextButton(
-                onPressed: () => Navigator.pop(context), child: Text('OK'))
-          ],
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Wallet Funded'),
+            duration: Duration(seconds: 2),
+          ),
         );
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) => const MYCardWidget()));
         return true;
       } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error'),
+            duration: Duration(seconds: 2),
+          ),
+        );
         //show error message
 
         return false;
       }
     } catch (e) {
+      print(e);
       return false;
     }
   }
@@ -176,7 +190,7 @@ class Caller {
       print("Receiver" + Receiver + "\n");
       print("Amount" + amount.toString() + "\n");
 
-      final Uri uri = Uri.http('192.168.1.23:8080', 'wallet/transfer', {
+      final Uri uri = Uri.http('192.168.1.22:8081', 'wallet/transfer', {
         'sender': Sender,
         'receiver': Receiver,
         'amount': amount.toString()
@@ -196,7 +210,7 @@ class Caller {
   Future<bool> getWalletDetails(String cin, BuildContext context) async {
     try {
       final Uri uri =
-          Uri.http('192.168.1.23:8080', '/wallet/get', {'cin': cin});
+          Uri.http('192.168.1.22:8081', '/wallet/get', {'cin': cin});
       final response = await http.post(uri);
       if (response.statusCode == 200) {
         final decodedBod = json.decode(response.body);
@@ -223,7 +237,7 @@ class Caller {
 
     try {
       final Uri uri =
-          Uri.http('192.168.1.23:8080', '/transaction/get', {'cin': cin});
+          Uri.http('192.168.1.22:8081', '/transaction/get', {'cin': cin});
       final response = await http.get(uri);
       final decodedBod = json.decode(response.body);
       print(decodedBod);
